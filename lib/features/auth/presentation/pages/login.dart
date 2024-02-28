@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test_flutter/home.dart';
+import 'package:test_flutter/features/bottom_navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               right: 0,
               left: 0,
               child: Container(
-                height: 300,
+                height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                   color: Colors.blue,
                   image: DecorationImage(
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ]
                 ),
-                height: MediaQuery.of(context).size.height-250,
+                height: MediaQuery.of(context).size.height-360,
                 width: MediaQuery.of(context).size.width,
                 child: Center(
                   child: Column(
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 30, 0, 30),
                         child: const Text(
-                          "QR Login App",
+                          "Login",
                           style: TextStyle(
                             fontSize: 40,
                           ),
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                                 strokeWidth: 3,
                               ),
                             )
-                          : const Text('LOG IN'),
+                          : const Text('Login'),
                           onPressed: () {
                             loginButtonAction(context, email!, password!);
                           },
@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const BottomNavBar()),
         );
 
         setState(() {
@@ -209,7 +209,7 @@ void _checkToken(BuildContext context) async {
     // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
       context, 
-      MaterialPageRoute(builder: (context) => const HomeScreen())
+      MaterialPageRoute(builder: (context) => const BottomNavBar())
     );
   }
 }

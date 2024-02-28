@@ -54,7 +54,7 @@ class _QRScanPageState extends State<QRScanPage> {
           //       )
           //     ),
           //     onPressed:() {
-          //       String key = "ezObA8FY9zGpSa0Q1Ljgd1mXjvVRqq";
+          //       String key = "WXeyMQWJwOXLz6zBJ2aMbAQ6U9kCFo";
           //       _loginRequestApi("http://172.20.8.136:8000/api/login/mobile/scan/qrcode?key=$key&type=1");
           //     },
           //     child: const Text('QR SCAN LOGIN'),
@@ -71,7 +71,7 @@ class _QRScanPageState extends State<QRScanPage> {
 
   Widget _buildQrView(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 200 ||
-            MediaQuery.of(context).size.height < 200)
+            MediaQuery.of(context).size.height < 100)
         ? 250.0
         : 300.0;
 
@@ -101,11 +101,11 @@ class _QRScanPageState extends State<QRScanPage> {
   }
 
   void _loginRequestApi(String data) async {
-    try{
-      EasyLoading.show(
-        status: "Please wait..."
-      );
+    EasyLoading.show(
+      status: "Please wait..."
+    );
 
+    try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? storedToken = prefs.getString('token');
 
