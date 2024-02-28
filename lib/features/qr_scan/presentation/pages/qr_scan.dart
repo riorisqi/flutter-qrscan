@@ -55,7 +55,7 @@ class _QRScanPageState extends State<QRScanPage> {
           //     ),
           //     onPressed:() {
           //       String key = "WXeyMQWJwOXLz6zBJ2aMbAQ6U9kCFo";
-          //       _loginRequestApi("http://172.20.8.136:8000/api/login/mobile/scan/qrcode?key=$key&type=1");
+          //       _loginRequestApi("http://172.20.8.136:8000/api/qrlogin/mobile/scan?key=$key");
           //     },
           //     child: const Text('QR SCAN LOGIN'),
           //   ),
@@ -107,10 +107,15 @@ class _QRScanPageState extends State<QRScanPage> {
 
     try{
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? storedToken = prefs.getString('token');
+      String? accessToken = prefs.getString('access_token');
+      String? storedUserQrPasscode = prefs.getString('user_qr_passcode');
+      String? storedUserQrToken = prefs.getString('user_qr_token');
 
       Map<String, String> headers = {
-        'userpasscode': storedToken!,
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $accessToken',
+        'userpasscode': storedUserQrPasscode!,
+        'userqrtoken': storedUserQrToken!
       };
 
       final response = await http.post(
@@ -124,7 +129,10 @@ class _QRScanPageState extends State<QRScanPage> {
 
         final responseQR = await http.post(
           Uri.parse(loginQrApi.toString()),
-          headers: headers
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $accessToken'
+          }
         );
 
         if(responseQR.statusCode == 200){

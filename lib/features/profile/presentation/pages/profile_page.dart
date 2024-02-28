@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:test_flutter/features/auth/presentation/pages/login.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,14 +15,29 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          logoutButtonAction();
+        },
+        icon: const Icon(Icons.exit_to_app),
+        label: const Text("Logout"),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       body: Stack(
         children: [
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.blueAccent,
             padding: const EdgeInsets.only(left: 30, right: 30, top: 70),
             alignment: Alignment.topLeft,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/bg.jpg"
+                ),
+                fit: BoxFit.cover
+              )
+            ),
             child: const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -71,28 +90,66 @@ class _ProfilePageState extends State<ProfilePage> {
                   topRight: Radius.circular(20)
                 )
               ),
-              child: ListView(
-                children: ListTile.divideTiles(context: context, tiles: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: const ListTile(
-                      leading: Icon(Icons.exit_to_app),
-                      title: Text('Logout')
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: const ListTile(
-                      leading: Icon(Icons.exit_to_app),
-                      title: Text('Logout')
-                    ),
-                  ),
-                ]).toList()
-              )
             ),
           )
         ],
       ),
     );
+  }
+
+  void logoutButtonAction() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString('access_token');
+
+    const snackBar = SnackBar(
+      content: Text('Failed to logout'),
+    );
+
+    try{
+      EasyLoading.show(
+        status: "Please wait..."
+      );
+
+      String url = "http://10.0.2.2:8000/api/auth/logout";
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $accessToken'
+      };
+
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers
+      );
+
+      if(response.statusCode == 200) {
+        prefs.remove('access_token');
+        prefs.remove('user_qr_passcode');
+        prefs.remove('user_qr_token');
+
+        EasyLoading.showSuccess(
+          'Logout Success',
+          dismissOnTap: true
+        );
+
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      } else {
+        EasyLoading.dismiss();
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        throw Exception('Failed to logout');
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      
+      return null;
+    }
   }
 }

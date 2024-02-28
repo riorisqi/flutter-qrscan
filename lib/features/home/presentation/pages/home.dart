@@ -17,9 +17,16 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            color: Colors.blueAccent,
             padding: const EdgeInsets.only(left: 30, right: 30, top: 80),
             alignment: Alignment.topCenter,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/bg.jpg"
+                ),
+                fit: BoxFit.cover
+              )
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,

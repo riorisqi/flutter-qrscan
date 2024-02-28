@@ -28,52 +28,59 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: Container(
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
+                alignment: Alignment.topCenter,
                 decoration: const BoxDecoration(
-                  color: Colors.blue,
                   image: DecorationImage(
-                    image: AssetImage("assets/images/flutter-icon.png")
+                    image: AssetImage(
+                      "assets/images/bg.jpg"
+                    ),
+                    fit: BoxFit.cover
                   )
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 15,
+                        spreadRadius: 5
+                      )
+                    ]
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 5
-                    )
-                  ]
-                ),
-                height: MediaQuery.of(context).size.height-360,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
+                  width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+                        margin: const EdgeInsets.fromLTRB(0, 30, 0, 10),
                         child: const Text(
                           "Login",
                           style: TextStyle(
                             fontSize: 40,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                        child: const Text(
+                          "Enter username and password",
+                          style: TextStyle(
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -94,7 +101,17 @@ class _LoginPageState extends State<LoginPage> {
                         const Icon(Icons.key_rounded)
                       ),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+                        margin: const EdgeInsets.only(right: 15),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: (){}, 
+                            child: const Text("Recover Password")
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(50),
@@ -120,12 +137,47 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                child: const Divider()
+                              )
+                            ),
+                            const Text("or"),
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 10),
+                                child: const Divider()
+                              )
+                            )
+                          ],
+                        )
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(50),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            )
+                          ),
+                          child: const Text('Login with SSO'),
+                          onPressed: () {},
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              )
-            ),
-          ]
+                )
+              ),
+            ]
+          ),
         ),
       ),
     );
@@ -136,21 +188,25 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
+    String url = "http://10.0.2.2:8000/api/auth/login";
     try{
-      String url = "http://172.20.8.136:8000/api/login/mobile";
-
       var response = await http.post(
         Uri.parse(url),
-        body: {
-          "email": email,
-          "password": password
-        }
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(
+          {
+            "email": email,
+            "password": password
+          }
+        )
       );
 
       if(response.statusCode == 200) {
         var data = jsonDecode(response.body);
         SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('token', data['userId']);
+        pref.setString('access_token', data['access_token']);
+        pref.setString('user_qr_passcode', data['user_qr_passcode']);
+        pref.setString('user_qr_token', data['user_qr_token']);
         isLoading = false;
         
         // ignore: use_build_context_synchronously
@@ -173,8 +229,8 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
       });
 
-      const snackBar = SnackBar(
-        content: Text('Failed to login'),
+      var snackBar = SnackBar(
+        content: Text('Failed to login: $e'),
       );
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -203,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
 
 void _checkToken(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedToken = prefs.getString('token');
+  String? storedToken = prefs.getString('access_token');
 
   if (storedToken != null && storedToken.isNotEmpty) {
     // ignore: use_build_context_synchronously
