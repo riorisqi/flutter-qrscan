@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
+import 'package:workmanager/workmanager.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,6 +17,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.red,
+        elevation: 4,
         onPressed: () {
           logoutButtonAction();
         },
@@ -126,6 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
         prefs.remove('access_token');
         prefs.remove('user_qr_passcode');
         prefs.remove('user_qr_token');
+
+        Workmanager().cancelAll();
 
         EasyLoading.showSuccess(
           'Logout Success',

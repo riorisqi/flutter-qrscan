@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_flutter/features/bottom_navbar.dart';
+import 'package:workmanager/workmanager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                        margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                         child: const Text(
                           "Login",
                           style: TextStyle(
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                         child: const Text(
-                          "Enter username and password",
+                          "Enter email and password",
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -121,6 +122,9 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(10)
                             )
                           ),
+                          onPressed: isLoading == false ? () {
+                            loginButtonAction(context, email!, password!);
+                          } : () {},
                           child: isLoading ?
                             Container(
                               width: 24,
@@ -131,10 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                                 strokeWidth: 3,
                               ),
                             )
-                          : const Text('Login'),
-                          onPressed: () {
-                            loginButtonAction(context, email!, password!);
-                          },
+                          : const Text('LOGIN'),
                         ),
                       ),
                       Container(
@@ -147,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: const Divider()
                               )
                             ),
-                            const Text("or"),
+                            const Text("OR"),
                             Expanded(
                               child: Container(
                                 margin: const EdgeInsets.only(left: 10),
@@ -168,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(10)
                             )
                           ),
-                          child: const Text('Login with SSO'),
+                          child: const Text('LOGIN WITH SSO'),
                           onPressed: () {},
                         ),
                       ),
@@ -208,11 +209,22 @@ class _LoginPageState extends State<LoginPage> {
         pref.setString('user_qr_passcode', data['user_qr_passcode']);
         pref.setString('user_qr_token', data['user_qr_token']);
         isLoading = false;
+
+        Workmanager().initialize(callbackDispatcher);
+        Workmanager().registerPeriodicTask(
+          "tokenRefreshTask",
+          "tokenRefresh",
+          frequency: const Duration(hours: 1),
+        );
         
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const BottomNavBar()),
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => const BottomNavBar(),
+            transitionDuration: const Duration(milliseconds: 500),
+            transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+          ),
         );
 
         setState(() {
@@ -229,14 +241,38 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
       });
 
-      var snackBar = SnackBar(
-        content: Text('Failed to login: $e'),
+      var snackBar = const SnackBar(
+        content: Text('Failed to login'),
       );
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       
       return null;
     }
+  }
+
+  void callbackDispatcher() {
+    Workmanager().executeTask((task, inputData) async {
+      String url = "http://10.0.2.2:8000/api/auth/refreshToken";
+      
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? token = pref.getString('access_token');
+
+      var response = await http.post(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        }
+      );
+      
+      if(response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        pref.setString('access_token', data['access_token']);
+      }
+
+      return Future.value(true);
+    });
   }
 
   Widget textInputField(String text, bool fieldStatus, Function(String) value, Icon icon){

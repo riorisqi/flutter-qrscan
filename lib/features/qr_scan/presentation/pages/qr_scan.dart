@@ -32,10 +32,12 @@ class _QRScanPageState extends State<QRScanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("QR Scanner"),
-        backgroundColor: Colors.blueAccent,
+        title: const Text("Scan QR Code"),
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Column(
         children: <Widget>[
@@ -63,7 +65,7 @@ class _QRScanPageState extends State<QRScanPage> {
           Expanded(
             flex: 5,
             child: _buildQrView(context)
-          )
+          ),
         ],
       ),
     );
@@ -73,17 +75,18 @@ class _QRScanPageState extends State<QRScanPage> {
     var scanArea = (MediaQuery.of(context).size.width < 200 ||
             MediaQuery.of(context).size.height < 100)
         ? 250.0
-        : 300.0;
+        : 330.0;
 
     return QRView(
       key: _qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.blueAccent,
-          borderRadius: 0,
-          borderLength: 30,
-          borderWidth: 15,
-          cutOutSize: scanArea),
+        borderColor: Colors.blueAccent,
+        borderRadius: 15,
+        borderLength: 30,
+        borderWidth: 15,
+        cutOutSize: scanArea
+      ),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }

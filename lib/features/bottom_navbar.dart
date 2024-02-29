@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:motion_tab_bar/MotionTabBar.dart';
+import 'package:motion_tab_bar/MotionTabBarController.dart';
 import 'package:test_flutter/features/home/presentation/pages/home.dart';
 import 'package:test_flutter/features/profile/presentation/pages/profile_page.dart';
 import 'package:test_flutter/features/search/presentation/pages/search_page.dart';
@@ -10,55 +12,65 @@ class BottomNavBar extends StatefulWidget {
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _BottomNavBarState extends State<BottomNavBar> with TickerProviderStateMixin {
   int currentPageIndex = 0;
   bool isLoading = false;
+  MotionTabBarController? _motionTabBarController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _motionTabBarController = MotionTabBarController(
+      initialIndex: 0,
+      length: 3,
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _motionTabBarController!.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        indicatorShape: const CircleBorder(),
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        onDestinationSelected:(value) {
+      bottomNavigationBar: MotionTabBar(
+        controller: _motionTabBarController,
+        initialSelectedTab: "Dashboard",
+        labels: const ["Dashboard", "Search", "Profile"],
+        icons: const [Icons.dashboard_rounded, Icons.search_rounded, Icons.person_rounded],
+        tabSize: 50,
+        tabBarHeight: 55,
+        textStyle: const TextStyle(
+          fontSize: 12,
+          color: Colors.black,
+          fontWeight: FontWeight.w500,
+        ),
+        tabIconColor: Colors.blue[600],
+        tabIconSize: 28.0,
+        tabIconSelectedSize: 26.0,
+        tabSelectedColor: Colors.blue[900],
+        tabIconSelectedColor: Colors.white,
+        tabBarColor: Colors.white,
+        onTabItemSelected: (int value) {
           setState(() {
-            currentPageIndex = value;
+            _motionTabBarController!.index = value;
           });
         },
-        indicatorColor: Colors.blueAccent,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(
-              Icons.home,
-              color: Colors.white,
-            ),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            icon: Icon(Icons.search_outlined),
-            label: 'Search',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
+      ),
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _motionTabBarController,
+        children: const <Widget>[
+          HomeScreen(),
+          SearchPage(),
+          ProfilePage()
         ],
       ),
-      body: <Widget>[
-        const HomeScreen(),
-        const SearchPage(),
-        const ProfilePage()
-      ][currentPageIndex],
     );
   }
 }
