@@ -161,37 +161,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget iconMenu(Icon icon, String label){
     return Expanded(
-      child: Column(
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(2, 3)
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            Ink(
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))
                 ),
-              ],
+                shadows: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: const Offset(2, 3)
+                  ),
+                ],
+              ),
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15))
+                  )
+                ),
+                onPressed:() {},
+                icon: icon,
+                iconSize: 32,
+                color: Colors.blueAccent,
+              ),
             ),
-            child: IconButton(
-              onPressed:() {},
-              icon: icon,
-              iconSize: 30,
-              color: Colors.blueAccent,
+            const SizedBox(
+              height: 5,
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            label
-          )
-        ],
+            Text(
+              label
+            )
+          ],
+        ),
       ),
     );
   }
