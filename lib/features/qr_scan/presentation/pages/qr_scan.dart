@@ -105,59 +105,58 @@ class _QRScanPageState extends State<QRScanPage> {
   }
 
   void _loginRequestApi(String data) async {
+    qrController!.pauseCamera();
+
     EasyLoading.show(
       status: "Please wait..."
     );
 
-    try{
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? accessToken = prefs.getString('access_token');
-      String? storedUserQrPasscode = prefs.getString('user_qr_passcode');
-      String? storedUserQrToken = prefs.getString('user_qr_token');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    String? storedUserQrPasscode = prefs.getString('user_qr_passcode');
+    String? storedUserQrToken = prefs.getString('user_qr_token');
 
-      Map<String, String> headers = {
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $accessToken',
-        'userpasscode': storedUserQrPasscode!,
-        'userqrtoken': storedUserQrToken!
-      };
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $accessToken',
+      'userpasscode': storedUserQrPasscode!,
+      'userqrtoken': storedUserQrToken!
+    };
 
-      final response = await http.post(
-        Uri.parse(data),
-        headers: headers
-      );
+    final response = await http.post(
+      Uri.parse(data),
+      headers: headers
+    );
 
-      if(response.statusCode == 200){
-        var data = jsonDecode(response.body);
-        var loginQrApi = data['msg'];
+    if(response.statusCode == 200){
+      var data = jsonDecode(response.body);
+      var loginQrApi = data['msg'];
 
-        final responseQR = await http.post(
-          Uri.parse(loginQrApi.toString()),
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': 'Bearer $accessToken'
-          }
-        );
-
-        if(responseQR.statusCode == 200){
-          EasyLoading.showSuccess(
-            'Login Success',
-            dismissOnTap: true
-          );
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
-        } else {
-          EasyLoading.showError(
-            'Failed to login',
-            dismissOnTap: true
-          );
+      final responseQR = await http.post(
+        Uri.parse(loginQrApi.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $accessToken'
         }
-      }
-    } catch (e){
-      EasyLoading.showError(
-        'Failed to login',
-        dismissOnTap: true
       );
+
+      if(responseQR.statusCode == 200){
+        qrController!.resumeCamera();
+
+        EasyLoading.showSuccess(
+          'Login Success',
+          dismissOnTap: true
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      } else {
+        qrController!.resumeCamera();
+
+        EasyLoading.showError(
+          'Failed to login',
+          dismissOnTap: true
+        );
+      }
     }
   }
 
