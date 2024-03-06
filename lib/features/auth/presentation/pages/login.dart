@@ -15,8 +15,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  String? email;
-  String? password;
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
   bool isLoading = false;
 
   @override
@@ -94,19 +95,17 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               //email field
                               TextFormField(
+                                controller: email,
                                 validator: (text){
                                   final bool emailValid = 
                                     RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                       .hasMatch(text!);
                                   
-                                  if(!emailValid){
-                                    return 'Email address is not valid';
+                                  if(!emailValid || text.isEmpty){
+                                    return 'Email address is not valid or cannot be empty';
                                   }
                               
                                   return null;
-                                },
-                                onChanged: (value){
-                                  email = value;
                                 },
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -121,14 +120,12 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               //password field
                               TextFormField(
+                                controller: password,
                                 validator: (text){
                                   if(text!.isEmpty){
                                     return 'Password can\'t be empty';
                                   }
                                   return null;
-                                },
-                                onChanged: (value){
-                                  password = value;
                                 },
                                 obscureText: true,
                                 decoration: InputDecoration(
@@ -165,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                             )
                           ),
                           onPressed: () {
-                            loginButtonAction(email!, password);
+                            loginButtonAction(email.text, password.text);
                           },
                           child: isLoading ?
                             Container(
@@ -226,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void loginButtonAction(String email, password) async {
+  void loginButtonAction(String email, String password) async {
     if(_formkey.currentState!.validate()){
       setState(() {
         isLoading = true;
