@@ -3,7 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
-import 'package:workmanager/workmanager.dart';
+// import 'package:workmanager/workmanager.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
 class ProfilePage extends StatefulWidget {
@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
         prefs.remove('access_token');
         prefs.remove('user_qr_passcode');
 
-        Workmanager().cancelAll();
+        // Workmanager().cancelAll();
 
         EasyLoading.showSuccess(
           'Logout Success',

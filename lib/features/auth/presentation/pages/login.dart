@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_flutter/features/bottom_navbar.dart';
-import 'package:workmanager/workmanager.dart';
+// import 'package:workmanager/workmanager.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
 class LoginPage extends StatefulWidget {
@@ -249,11 +249,11 @@ class _LoginPageState extends State<LoginPage> {
         pref.setString('user_qr_passcode', data['user_qr_passcode']);
         isLoading = false;
 
-        Workmanager().registerPeriodicTask(
-          "tokenRefreshTask",
-          "tokenRefresh",
-          frequency: const Duration(days: 1),
-        );
+        // Workmanager().registerPeriodicTask(
+        //   "tokenRefreshTask",
+        //   "tokenRefresh",
+        //   frequency: const Duration(days: 1),
+        // );
         
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
