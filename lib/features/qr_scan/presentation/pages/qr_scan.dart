@@ -42,6 +42,7 @@ class _QRScanPageState extends State<QRScanPage> {
       body: Column(
         children: <Widget>[
           // Container(
+          //   margin: const EdgeInsets.only(top: 200),
           //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           //   child: ElevatedButton(
           //     style: ElevatedButton.styleFrom(
@@ -56,8 +57,8 @@ class _QRScanPageState extends State<QRScanPage> {
           //       )
           //     ),
           //     onPressed:() {
-          //       String key = "WXeyMQWJwOXLz6zBJ2aMbAQ6U9kCFo";
-          //       _loginRequestApi("http://172.20.8.136:8000/api/qrlogin/mobile/scan?key=$key");
+          //       String key = "h0UA7OBZTWwcpDpeNjsrfPFveIOQjR";
+          //       _loginRequestApi("${constants.HTTP_API_HOST}/api/qrlogin/mobile/scan?key=$key");
           //     },
           //     child: const Text('QR SCAN LOGIN'),
           //   ),

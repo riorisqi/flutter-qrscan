@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:test_flutter/utils/constant.dart' as constants;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -105,16 +106,12 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('access_token');
 
-    const snackBar = SnackBar(
-      content: Text('Failed to logout'),
-    );
-
     try{
       EasyLoading.show(
         status: "Please wait..."
       );
 
-      String url = "http://10.0.2.2:8000/api/auth/logout";
+      String url = "${constants.HTTP_API_HOST}/api/auth/logout";
 
       Map<String, String> headers = {
         "Content-Type": "application/json",
@@ -144,16 +141,16 @@ class _ProfilePageState extends State<ProfilePage> {
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
       } else {
-        EasyLoading.dismiss();
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        throw Exception('Failed to logout');
+        EasyLoading.showError(
+          'Logout Failed',
+          dismissOnTap: true
+        );
       }
     } catch (e) {
-      EasyLoading.dismiss();
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      EasyLoading.showError(
+        'Logout Failed',
+        dismissOnTap: true
+      );
       
       return null;
     }

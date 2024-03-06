@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_flutter/features/bottom_navbar.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:test_flutter/utils/constant.dart' as constants;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   String? email;
   String? password;
   bool isLoading = false;
@@ -85,21 +86,62 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      textInputField(
-                        "Email", 
-                        false,
-                        (value){
-                          email = value;
-                        },
-                        const Icon(Icons.mail_outline_rounded)
-                      ),
-                      textInputField(
-                        "Password", 
-                        true,
-                        (value){
-                          password = value;
-                        },
-                        const Icon(Icons.key_rounded)
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+                        child: Form(
+                          key: _formkey,
+                          child: Column(
+                            children: [
+                              //email field
+                              TextFormField(
+                                validator: (text){
+                                  final bool emailValid = 
+                                    RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(text!);
+                                  
+                                  if(!emailValid){
+                                    return 'Email address is not valid';
+                                  }
+                              
+                                  return null;
+                                },
+                                onChanged: (value){
+                                  email = value;
+                                },
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  labelText: "Email",
+                                  prefixIcon: const Icon(Icons.mail_outline_rounded),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              //password field
+                              TextFormField(
+                                validator: (text){
+                                  if(text!.isEmpty){
+                                    return 'Password can\'t be empty';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value){
+                                  password = value;
+                                },
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  labelText: "Password",
+                                  prefixIcon: const Icon(Icons.key_rounded),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                       Container(
                         margin: const EdgeInsets.only(right: 15),
@@ -122,9 +164,9 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(10)
                             )
                           ),
-                          onPressed: isLoading == false ? () {
-                            loginButtonAction(context, email!, password!);
-                          } : () {},
+                          onPressed: () {
+                            loginButtonAction(email!, password);
+                          },
                           child: isLoading ?
                             Container(
                               width: 24,
@@ -184,13 +226,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void loginButtonAction(BuildContext context, String email, password) async {
-    setState(() {
-      isLoading = true;
-    });
+  void loginButtonAction(String email, password) async {
+    if(_formkey.currentState!.validate()){
+      setState(() {
+        isLoading = true;
+      });
 
-    String url = "http://10.0.2.2:8000/api/auth/login";
-    try{
+      String url = "${constants.HTTP_API_HOST}/api/auth/login";
+      
       var response = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
@@ -210,11 +253,10 @@ class _LoginPageState extends State<LoginPage> {
         pref.setString('user_qr_token', data['user_qr_token']);
         isLoading = false;
 
-        Workmanager().initialize(callbackDispatcher);
         Workmanager().registerPeriodicTask(
           "tokenRefreshTask",
           "tokenRefresh",
-          frequency: const Duration(hours: 1),
+          frequency: const Duration(days: 1),
         );
         
         // ignore: use_build_context_synchronously
@@ -234,74 +276,29 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           isLoading = false;
         });
+
+        const snackBar = SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text('Login Failed'),
+        );
+        
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         throw Exception('Failed to login');
       }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-
-      var snackBar = const SnackBar(
-        content: Text('Failed to login'),
-      );
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      
-      return null;
     }
   }
 
-  void callbackDispatcher() {
-    Workmanager().executeTask((task, inputData) async {
-      String url = "http://10.0.2.2:8000/api/auth/refreshToken";
-      
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? token = pref.getString('access_token');
+  void _checkToken(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedToken = prefs.getString('access_token');
 
-      var response = await http.post(
-        Uri.parse(url),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        }
+    if (storedToken != null && storedToken.isNotEmpty) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(builder: (context) => const BottomNavBar())
       );
-      
-      if(response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        pref.setString('access_token', data['access_token']);
-      }
-
-      return Future.value(true);
-    });
-  }
-
-  Widget textInputField(String text, bool fieldStatus, Function(String) value, Icon icon){
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-      child: TextField(
-        onChanged: value,
-        obscureText: fieldStatus,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          labelText: text,
-          prefixIcon: icon,
-        ),
-      ),
-    );
-  }
-}
-
-void _checkToken(BuildContext context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? storedToken = prefs.getString('access_token');
-
-  if (storedToken != null && storedToken.isNotEmpty) {
-    // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
-      context, 
-      MaterialPageRoute(builder: (context) => const BottomNavBar())
-    );
+    }
   }
 }

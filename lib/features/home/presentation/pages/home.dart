@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:test_flutter/features/qr_scan/presentation/pages/qr_scan.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +11,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    
+    initializeDateFormatting();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,11 +96,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       height: 160,
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                       width: MediaQuery.of(context).size.width,
                       margin: const EdgeInsets.all(20),
                       decoration: const BoxDecoration(
-                        color: Colors.blueAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(20))
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            "assets/images/bg.jpg"
+                          ),
+                          fit: BoxFit.cover
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            DateFormat("EEEE, d MMMM yyyy", "id").format(DateTime.now()),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: "Muli"
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     const SizedBox(

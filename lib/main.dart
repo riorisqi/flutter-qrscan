@@ -1,10 +1,41 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:http/http.dart' as http;
+import 'package:test_flutter/utils/constant.dart' as constants;
 
 void main() {
   runApp(const MyApp());
   configEasyLoading();
+  Workmanager().initialize(callbackDispatcher);
+}
+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    String url = "${constants.HTTP_API_HOST}/api/auth/refreshToken";
+    
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? token = pref.getString('access_token');
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      }
+    );
+    
+    if(response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      pref.setString('access_token', data['access_token']);
+    }
+
+    return Future.value(true);
+  });
 }
 
 void configEasyLoading(){
