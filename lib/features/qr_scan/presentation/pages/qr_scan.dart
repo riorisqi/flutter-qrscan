@@ -39,36 +39,7 @@ class _QRScanPageState extends State<QRScanPage> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Column(
-        children: <Widget>[
-          // Container(
-          //   margin: const EdgeInsets.only(top: 200),
-          //   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          //   child: ElevatedButton(
-          //     style: ElevatedButton.styleFrom(
-          //       minimumSize: const Size.fromHeight(50),
-          //       backgroundColor: Colors.white,
-          //       foregroundColor: Colors.black,
-          //       side: const BorderSide(
-          //         color: Colors.red
-          //       ),
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(10)
-          //       )
-          //     ),
-          //     onPressed:() {
-          //       String key = "h0UA7OBZTWwcpDpeNjsrfPFveIOQjR";
-          //       _loginRequestApi("${constants.HTTP_API_HOST}/api/qrlogin/mobile/scan?key=$key");
-          //     },
-          //     child: const Text('QR SCAN LOGIN'),
-          //   ),
-          // ),
-          Expanded(
-            flex: 5,
-            child: _buildQrView(context)
-          ),
-        ],
-      ),
+      body: _buildQrView(context),
     );
   }
 
@@ -114,13 +85,11 @@ class _QRScanPageState extends State<QRScanPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
     String? storedUserQrPasscode = prefs.getString('user_qr_passcode');
-    String? storedUserQrToken = prefs.getString('user_qr_token');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
       'Authorization': 'Bearer $accessToken',
-      'userpasscode': storedUserQrPasscode!,
-      'userqrtoken': storedUserQrToken!
+      'userpasscode': storedUserQrPasscode!
     };
 
     final response = await http.post(

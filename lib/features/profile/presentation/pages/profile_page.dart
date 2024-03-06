@@ -126,7 +126,6 @@ class _ProfilePageState extends State<ProfilePage> {
       if(response.statusCode == 200) {
         prefs.remove('access_token');
         prefs.remove('user_qr_passcode');
-        prefs.remove('user_qr_token');
 
         Workmanager().cancelAll();
 

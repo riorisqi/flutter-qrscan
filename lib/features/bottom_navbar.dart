@@ -22,7 +22,7 @@ class _BottomNavBarState extends State<BottomNavBar> with TickerProviderStateMix
     super.initState();
 
     _motionTabBarController = MotionTabBarController(
-      initialIndex: 0,
+      initialIndex: 1,
       length: 3,
       vsync: this,
     );
@@ -41,8 +41,16 @@ class _BottomNavBarState extends State<BottomNavBar> with TickerProviderStateMix
       bottomNavigationBar: MotionTabBar(
         controller: _motionTabBarController,
         initialSelectedTab: "Dashboard",
-        labels: const ["Dashboard", "Search", "Profile"],
-        icons: const [Icons.dashboard_rounded, Icons.search_rounded, Icons.person_rounded],
+        labels: const [
+          "Search",
+          "Dashboard",
+          "Profile"
+        ],
+        icons: const [
+          Icons.search_rounded,
+          Icons.dashboard_rounded,
+          Icons.person_rounded
+        ],
         tabSize: 50,
         tabBarHeight: 55,
         textStyle: const TextStyle(
@@ -66,8 +74,8 @@ class _BottomNavBarState extends State<BottomNavBar> with TickerProviderStateMix
         physics: const NeverScrollableScrollPhysics(),
         controller: _motionTabBarController,
         children: const <Widget>[
-          HomeScreen(),
           SearchPage(),
+          HomeScreen(),
           ProfilePage()
         ],
       ),

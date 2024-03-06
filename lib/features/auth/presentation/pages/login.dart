@@ -247,7 +247,6 @@ class _LoginPageState extends State<LoginPage> {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('access_token', data['access_token']);
         pref.setString('user_qr_passcode', data['user_qr_passcode']);
-        pref.setString('user_qr_token', data['user_qr_token']);
         isLoading = false;
 
         Workmanager().registerPeriodicTask(
