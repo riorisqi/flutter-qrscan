@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
+import 'package:test_flutter/utils/background_widget.dart';
 // import 'package:workmanager/workmanager.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
@@ -30,55 +31,47 @@ class _ProfilePageState extends State<ProfilePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       body: Stack(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(left: 30, right: 30, top: 70),
-            alignment: Alignment.topLeft,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  "assets/images/bg.jpg"
-                ),
-                fit: BoxFit.cover
-              )
-            ),
-            child: const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: CircleAvatar(
-                    radius: 38,
-                    backgroundImage: AssetImage(
-                      "assets/images/cat.jpg"
-                    )
+          backgroundWidget(
+            context,
+            Container(
+              margin: const EdgeInsets.only(top: 70),
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CircleAvatar(
+                      radius: 38,
+                      backgroundImage: AssetImage(
+                        "assets/images/cat.jpg"
+                      )
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Rio Risqi Akbar Herlambang",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Rio Risqi Akbar Herlambang",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "Programmer",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14
+                        SizedBox(
+                          height: 5,
                         ),
-                      ),
-                    ],
+                        Text(
+                          "Programmer",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Positioned(
