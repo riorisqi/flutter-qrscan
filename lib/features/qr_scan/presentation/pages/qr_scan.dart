@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -78,6 +79,9 @@ class _QRScanPageState extends State<QRScanPage> {
   void _loginRequestApi(String data) async {
     qrController!.pauseCamera();
 
+    String scanTime = DateTime.now().toString();
+    String? deviceId = await _getId();
+
     EasyLoading.show(
       status: "Please wait..."
     );
@@ -87,13 +91,13 @@ class _QRScanPageState extends State<QRScanPage> {
     String? storedUserQrPasscode = prefs.getString('user_qr_passcode');
 
     Map<String, String> headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
       'userpasscode': storedUserQrPasscode!
     };
 
     final response = await http.post(
-      Uri.parse(data),
+      Uri.parse("$data&scanTime=$scanTime&deviceInfo=$deviceId"),
       headers: headers
     );
 
@@ -137,6 +141,19 @@ class _QRScanPageState extends State<QRScanPage> {
         dismissOnTap: true
       );
     }
+  }
+
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) { // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if(Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.androidId; // unique ID on Android
+    }
+    
+    return null;
   }
 
   @override
