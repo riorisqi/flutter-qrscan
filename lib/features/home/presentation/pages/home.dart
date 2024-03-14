@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:test_flutter/features/qr_scan/presentation/pages/qr_scan.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:test_flutter/utils/constant.dart' as constants;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -110,6 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             DateFormat("EEEE, d MMMM yyyy", "id").format(DateTime.now()),
@@ -118,7 +121,51 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 20,
                               fontFamily: "Muli"
                             ),
-                          )
+                          ),
+                          // Expanded(
+                          //   child: Row(
+                          //     children: [
+                          //       const Expanded(
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.start,
+                          //           crossAxisAlignment: CrossAxisAlignment.start,
+                          //           children: [
+                          //             Text(
+                          //               "Check in",
+                          //               style: TextStyle(
+                          //                 color: Colors.white,
+                          //                 fontSize: 20,
+                          //                 fontFamily: "Muli",
+                          //                 fontWeight: FontWeight.bold
+                          //               ),
+                          //             ),
+                          //             Text(
+                          //               "07:15",
+                          //               style: TextStyle(
+                          //                 color: Colors.white,
+                          //                 fontSize: 20,
+                          //                 fontFamily: "Muli"
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //       Expanded(
+                          //         child: ElevatedButton(
+                          //           style: ElevatedButton.styleFrom(
+                          //             backgroundColor: Colors.white,
+                          //             foregroundColor: constants.COLOR,
+                          //             shape: RoundedRectangleBorder(
+                          //               borderRadius: BorderRadius.circular(20)
+                          //             )
+                          //           ),
+                          //           onPressed: () {},
+                          //           child: Text("Check Out")
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
@@ -217,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed:() {},
                 icon: icon,
                 iconSize: 32,
-                color: Colors.blueAccent,
+                color: constants.COLOR,
               ),
             ),
             const SizedBox(

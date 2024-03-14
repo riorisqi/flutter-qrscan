@@ -102,9 +102,13 @@ class _LoginPageState extends State<LoginPage> {
                       final bool emailValid = 
                         RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(text!);
-                      
-                      if(!emailValid || text.isEmpty){
-                        return 'Email address is not valid or cannot be empty';
+
+                      if(text.isEmpty){
+                        return 'Email address can\'t be empty';
+                      }
+
+                      if(!emailValid){
+                        return 'Email address is not valid';
                       }
                   
                       return null;
@@ -147,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: constants.COLOR,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)

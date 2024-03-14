@@ -4,6 +4,7 @@ import 'package:motion_tab_bar/MotionTabBarController.dart';
 import 'package:test_flutter/features/home/presentation/pages/home.dart';
 import 'package:test_flutter/features/profile/presentation/pages/profile_page.dart';
 import 'package:test_flutter/features/search/presentation/pages/search_page.dart';
+import 'package:test_flutter/utils/constant.dart' as constant;
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -58,10 +59,10 @@ class _BottomNavBarState extends State<BottomNavBar> with TickerProviderStateMix
           color: Colors.black,
           fontWeight: FontWeight.w500,
         ),
-        tabIconColor: Colors.blue[600],
+        tabIconColor: constant.COLOR,
         tabIconSize: 28.0,
         tabIconSelectedSize: 26.0,
-        tabSelectedColor: Colors.blue[900],
+        tabSelectedColor: constant.COLOR,
         tabIconSelectedColor: Colors.white,
         tabBarColor: Colors.white,
         onTabItemSelected: (int value) {

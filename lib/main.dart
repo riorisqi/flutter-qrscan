@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
 // import 'package:workmanager/workmanager.dart';
 // import 'package:http/http.dart' as http;
+import 'package:test_flutter/utils/constant.dart' as constants;
 
 void main() {
   runApp(const MyApp());
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: constants.COLOR),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,

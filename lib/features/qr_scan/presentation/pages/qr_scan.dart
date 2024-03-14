@@ -7,6 +7,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:test_flutter/utils/constant.dart' as constants;
 
 class QRScanPage extends StatefulWidget {
   const QRScanPage({super.key});
@@ -54,7 +55,7 @@ class _QRScanPageState extends State<QRScanPage> {
       key: _qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-        borderColor: Colors.blueAccent,
+        borderColor: constants.COLOR,
         borderRadius: 15,
         borderLength: 30,
         borderWidth: 15,
@@ -145,12 +146,12 @@ class _QRScanPageState extends State<QRScanPage> {
 
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin();
-    if (Platform.isIOS) { // import 'dart:io'
+    if (Platform.isIOS) {
       var iosDeviceInfo = await deviceInfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+      return iosDeviceInfo.name;
     } else if(Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
-      return androidDeviceInfo.androidId; // unique ID on Android
+      return "${androidDeviceInfo.manufacturer}, ${androidDeviceInfo.brand} ${androidDeviceInfo.model}";
     }
     
     return null;

@@ -29,68 +29,90 @@ class _ProfilePageState extends State<ProfilePage> {
         label: const Text("Logout"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      body: Stack(
-        children: [
-          backgroundWidget(
-            context,
-            Container(
-              margin: const EdgeInsets.only(top: 70),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: CircleAvatar(
-                      radius: 38,
-                      backgroundImage: AssetImage(
-                        "assets/images/cat.jpg"
-                      )
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            backgroundWidget(
+              context,
+              Container(
+                margin: const EdgeInsets.only(top: 70),
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: CircleAvatar(
+                        radius: 38,
+                        backgroundImage: AssetImage(
+                          "assets/images/cat.jpg"
+                        )
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Rio Risqi Akbar Herlambang",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Rio Risqi Akbar Herlambang",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Programmer",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14
+                          SizedBox(
+                            height: 5,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "Programmer",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            top: 180,
-            left: 0,
-            right: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20)
-                )
+            Positioned(
+              top: 180,
+              left: 0,
+              right: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)
+                  )
+                ),
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text("Profile"),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {},
+                    ),
+                    const Divider(height: 1,),
+                    ListTile(
+                      leading: const Icon(Icons.settings),
+                      title: const Text("Settings"),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      onTap: () {},
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -117,8 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
       if(response.statusCode == 200) {
-        prefs.remove('access_token');
-        prefs.remove('user_qr_passcode');
+        prefs.clear();
 
         // Workmanager().cancelAll();
 
