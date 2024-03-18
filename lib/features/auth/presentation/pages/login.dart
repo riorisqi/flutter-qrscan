@@ -5,8 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_flutter/features/auth/presentation/widgets/text_field_form.dart';
 import 'package:test_flutter/features/bottom_navbar.dart';
 import 'package:test_flutter/utils/background_widget.dart';
-// import 'package:workmanager/workmanager.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
+
+// for workmanager schedule refresh token
+// import 'package:workmanager/workmanager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,17 +37,13 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
               backgroundWidget(
                 context,
                 Container()
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: loginForm()
-              ),
+              loginForm(),
             ]
           ),
         ),
@@ -175,41 +173,41 @@ class _LoginPageState extends State<LoginPage> {
               : const Text('LOGIN'),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: const Divider()
-                  )
-                ),
-                const Text("OR"),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child: const Divider()
-                  )
-                )
-              ],
-            )
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
-                )
-              ),
-              child: const Text('LOGIN WITH SSO'),
-              onPressed: () {},
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: Container(
+          //           margin: const EdgeInsets.only(right: 10),
+          //           child: const Divider()
+          //         )
+          //       ),
+          //       const Text("OR"),
+          //       Expanded(
+          //         child: Container(
+          //           margin: const EdgeInsets.only(left: 10),
+          //           child: const Divider()
+          //         )
+          //       )
+          //     ],
+          //   )
+          // ),
+          // Container(
+          //   margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          //   child: ElevatedButton(
+          //     style: ElevatedButton.styleFrom(
+          //       minimumSize: const Size.fromHeight(50),
+          //       backgroundColor: Colors.white,
+          //       foregroundColor: Colors.black,
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(10)
+          //       )
+          //     ),
+          //     child: const Text('LOGIN WITH SSO'),
+          //     onPressed: () {},
+          //   ),
+          // ),
         ],
       ),
     );
@@ -240,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
       pref.setString('user_qr_passcode', data['user_qr_passcode']);
       isLoading = false;
 
+      // for workmanager schedule refresh token
       // Workmanager().registerPeriodicTask(
       //   "tokenRefreshTask",
       //   "tokenRefresh",

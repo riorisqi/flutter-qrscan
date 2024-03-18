@@ -131,6 +131,40 @@ class _QRScanPageState extends State<QRScanPage> {
           dismissOnTap: true
         );
       }
+    } else if(response.statusCode == 401){
+      _refreshToken(accessToken!, scanResult!.code!);
+    } else {
+      qrController!.resumeCamera();
+
+      EasyLoading.showError(
+        'Failed to login',
+        dismissOnTap: true
+      );
+    }
+  }
+
+  void _refreshToken(String jwtToken, String qrData) async {
+    String url = "${constants.HTTP_API_HOST}/api/auth/refreshToken";
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $jwtToken"
+      }
+    );
+
+    if(response.statusCode == 200){
+      var data = jsonDecode(response.body);
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString('access_token', data['access_token']);
+
+      _loginRequestApi(qrData);
+    } else {
+      EasyLoading.showError(
+        'Failed to login',
+        dismissOnTap: true
+      );
     }
   }
 
