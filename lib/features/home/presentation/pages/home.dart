@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             margin: const EdgeInsets.only(top: 170),
-            height: MediaQuery.of(context).size.height, // delete/comment this when the content already a lot
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -112,11 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        DateFormat("EEEE, d MMMM yyyy", "id").format(DateTime.now()),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20 
+                      Expanded(
+                        child: Text(
+                          DateFormat("EEEE, d MMMM yyyy", "id").format(DateTime.now()),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20 
+                          ),
                         ),
                       ),
                       // Expanded(
@@ -132,7 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       //               style: TextStyle(
                       //                 color: Colors.white,
                       //                 fontSize: 20,
-                      //                 fontFamily: "Muli",
                       //                 fontWeight: FontWeight.bold
                       //               ),
                       //             ),
@@ -141,23 +141,57 @@ class _HomeScreenState extends State<HomeScreen> {
                       //               style: TextStyle(
                       //                 color: Colors.white,
                       //                 fontSize: 20,
-                      //                 fontFamily: "Muli"
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       const Expanded(
+                      //         child: Column(
+                      //           mainAxisAlignment: MainAxisAlignment.start,
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Text(
+                      //               "Check out",
+                      //               style: TextStyle(
+                      //                 color: Colors.white,
+                      //                 fontSize: 20,
+                      //                 fontWeight: FontWeight.bold
+                      //               ),
+                      //             ),
+                      //             Text(
+                      //               "-",
+                      //               style: TextStyle(
+                      //                 color: Colors.white,
+                      //                 fontSize: 20,
                       //               ),
                       //             ),
                       //           ],
                       //         ),
                       //       ),
                       //       Expanded(
-                      //         child: ElevatedButton(
-                      //           style: ElevatedButton.styleFrom(
-                      //             backgroundColor: Colors.white,
-                      //             foregroundColor: constants.COLOR,
-                      //             shape: RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(20)
+                      //         child: Container(
+                      //           margin: const EdgeInsets.only(left: 10),
+                      //           child: ElevatedButton(
+                      //             style: ElevatedButton.styleFrom(
+                      //               backgroundColor: Colors.white,
+                      //               foregroundColor: constants.COLOR,
+                      //               shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(20)
+                      //               )
+                      //             ),
+                      //             onPressed: () {},
+                      //             child: Container(
+                      //               margin: const EdgeInsets.symmetric(vertical: 10),
+                      //               child: const Text(
+                      //                 "Check Out",
+                      //                 textAlign: TextAlign.center,
+                      //                 style: TextStyle(
+                      //                   fontSize: 15
+                      //                 ),
+                      //               ),
                       //             )
                       //           ),
-                      //           onPressed: () {},
-                      //           child: Text("Check Out")
                       //         ),
                       //       ),
                       //     ],

@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
         label: const Text("Logout"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      body: Stack(
+      body: Stack( // add singlechildscrollview when content already a lot
         children: [
           backgroundWidget(
             context,
@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
             margin: const EdgeInsets.only(top: 170),
             height: MediaQuery.of(context).size.height, // delete/comment this when the content already a lot
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -91,8 +91,8 @@ class _ProfilePageState extends State<ProfilePage> {
               )
             ),
             child: ListView(
+              padding: const EdgeInsets.all(0),
               physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
                 ListTile(
