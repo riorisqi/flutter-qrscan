@@ -98,7 +98,7 @@ class _QRScanPageState extends State<QRScanPage> {
     };
 
     final response = await http.post(
-      Uri.parse("$data&scanTime=$scanTime&deviceInfo=$deviceId"),
+      Uri.parse("$data&type=1&scanTime=$scanTime&deviceInfo=$deviceId"),
       headers: headers
     );
 
