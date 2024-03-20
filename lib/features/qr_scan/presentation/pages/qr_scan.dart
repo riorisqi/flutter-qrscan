@@ -180,12 +180,18 @@ class _QRScanPageState extends State<QRScanPage> {
 
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin();
+    
     if (Platform.isIOS) {
       var iosDeviceInfo = await deviceInfo.iosInfo;
+
       return iosDeviceInfo.name;
     } else if(Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
-      return "${androidDeviceInfo.manufacturer}, ${androidDeviceInfo.brand} ${androidDeviceInfo.model}";
+      var androidManufacturer = androidDeviceInfo.manufacturer;
+      var androidBrand = androidDeviceInfo.brand;
+      var androidModel = androidDeviceInfo.model;
+
+      return "$androidManufacturer, $androidBrand $androidModel";
     }
     
     return null;

@@ -21,6 +21,7 @@ dependencies:
   device_info_plus: ^3.2.3
   auto_height_grid_view: ^1.0.0
   lottie: ^3.1.0
+  http_interceptor: ^2.0.0-beta.8
 
 dev_dependencies:
   flutter_test:

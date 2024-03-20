@@ -134,16 +134,16 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: (){}, 
-                child: const Text("Recover Password")
-              ),
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(right: 15),
+          //   child: Align(
+          //     alignment: Alignment.centerRight,
+          //     child: TextButton(
+          //       onPressed: (){}, 
+          //       child: const Text("Recover Password")
+          //     ),
+          //   ),
+          // ),
           Container(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: ElevatedButton(

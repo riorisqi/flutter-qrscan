@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_flutter/features/auth/presentation/pages/login.dart';
+import 'package:test_flutter/features/profile/presentation/pages/profile_detail_page.dart';
 import 'package:test_flutter/utils/background_widget.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
@@ -21,17 +22,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.red,
-        elevation: 4,
-        onPressed: () {
-          logoutButtonAction();
-        },
-        icon: const Icon(Icons.exit_to_app),
-        label: const Text("Logout"),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       body: Stack( // add singlechildscrollview when content already a lot
         children: [
           backgroundWidget(
@@ -95,24 +85,73 @@ class _ProfilePageState extends State<ProfilePage> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: [
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text("Profile"),
-                  trailing: const Icon(Icons.keyboard_arrow_right),
-                  onTap: () {},
-                ),
-                const Divider(height: 1,),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text("Settings"),
-                  trailing: const Icon(Icons.keyboard_arrow_right),
-                  onTap: () {},
-                ),
+                listTile(Icons.person, "Profile", () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfileDetailPage())
+                  );
+                }),
+                const SizedBox(height: 8),
+                listTile(Icons.settings, "Settings", () {}),
+                const SizedBox(height: 8),
+                listTile(Icons.exit_to_app, "Logout", () {
+                  showAlertDialog(context);
+                })
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  Widget listTile(IconData icon, String text, void Function()? onTap){
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: onTap,
+        child: ListTile(
+          leading: Icon(icon, color: constants.COLOR,),
+          title: Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          trailing: const Icon(Icons.keyboard_arrow_right)
+        ),
+      ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: const Text("No"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Yes"),
+      onPressed:  () {
+        logoutButtonAction();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      icon: const Icon(Icons.warning_rounded, color: Colors.red,),
+      content: const Text("Are you sure you want to logout?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
