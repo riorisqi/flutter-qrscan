@@ -10,8 +10,8 @@ const Color COLOR = Color.fromARGB(255, 4, 77, 162);
 // for search test
 final List<MenuItem> allMenuItems = [
   MenuItem(name: 'Profile', icon: Icons.person, routePage: "/profile"),
-  MenuItem(name: 'QR Scan', icon: Icons.qr_code_scanner, routePage: "/qrscan"),
-  MenuItem(name: 'Route', icon: Icons.home_rounded, routePage: "/route"),
+  MenuItem(name: 'QR Login', icon: Icons.qr_code_scanner, routePage: "/qrlogin"),
+  MenuItem(name: 'Authenticator', icon: Icons.key_rounded, routePage: "/authenticator"),
   MenuItem(name: 'Play', icon: Icons.gamepad_rounded, routePage: "/play"),
   MenuItem(name: 'Document', icon: Icons.book_rounded, routePage: "/document"),
   MenuItem(name: 'Warning', icon: Icons.warning_rounded, routePage: "/warning"),

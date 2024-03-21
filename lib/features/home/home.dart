@@ -1,7 +1,7 @@
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:test_flutter/features/qr_scan/presentation/pages/qr_scan.dart';
+import 'package:test_flutter/features/auth/qr_login/qr_login.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed:() {
                           Navigator.push(
                             context, 
-                            MaterialPageRoute(builder: (context) => const QRScanPage())
+                            MaterialPageRoute(builder: (context) => const QRLoginPage())
                           );
                         },
                         iconSize: 35,
@@ -259,7 +259,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 menuItem.name,
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14
                                 ),
                               )
                             ],

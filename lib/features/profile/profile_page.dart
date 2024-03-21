@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:test_flutter/features/auth/presentation/pages/login.dart';
-import 'package:test_flutter/features/profile/presentation/pages/profile_detail_page.dart';
+import 'package:test_flutter/features/auth/login/login.dart';
+import 'package:test_flutter/features/profile/profile_detail_page.dart';
 import 'package:test_flutter/utils/background_widget.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack( // add singlechildscrollview when content already a lot
+      body: Stack(
         children: [
           backgroundWidget(
             context,
@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: InkWell(
         onTap: onTap,
         child: ListTile(
-          leading: Icon(icon, color: constants.COLOR,),
+          leading: Icon(icon, color: icon == Icons.exit_to_app ? Colors.red : constants.COLOR,),
           title: Text(
             text,
             style: const TextStyle(

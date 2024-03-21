@@ -9,14 +9,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
-class QRScanPage extends StatefulWidget {
-  const QRScanPage({super.key});
+class QRLoginPage extends StatefulWidget {
+  const QRLoginPage({super.key});
 
   @override
-  State<QRScanPage> createState() => _QRScanPageState();
+  State<QRLoginPage> createState() => _QRLoginPageState();
 }
 
-class _QRScanPageState extends State<QRScanPage> {
+class _QRLoginPageState extends State<QRLoginPage> {
   Barcode? scanResult;
   QRViewController? qrController;
   final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');

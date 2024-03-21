@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:test_flutter/features/auth/presentation/pages/login.dart';
-import 'package:test_flutter/features/qr_scan/presentation/pages/qr_scan.dart';
+import 'package:test_flutter/features/auth/authenticator/authenticator.dart';
+import 'package:test_flutter/features/auth/login/login.dart';
+import 'package:test_flutter/features/auth/qr_login/qr_login.dart';
 import 'package:test_flutter/utils/constant.dart' as constants;
 
 // for workmanager schedule refresh token
@@ -58,14 +59,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: constants.COLOR),
+        colorSchemeSeed: constants.COLOR,
         useMaterial3: true,
       ),
+      // darkTheme: ThemeData(
+      //   useMaterial3: true,
+      //   brightness: Brightness.dark,
+      //   colorSchemeSeed: constants.COLOR
+      // ),
+      // themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
       builder: EasyLoading.init(),
       routes: {
-        '/qrscan': (context) => const QRScanPage(),
+        '/qrlogin': (context) => const QRLoginPage(),
+        '/authenticator': (context) => const AuthenticatorPage()
       },
     );
   }

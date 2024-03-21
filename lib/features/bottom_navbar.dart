@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 import 'package:motion_tab_bar/MotionTabBarController.dart';
-import 'package:test_flutter/features/home/presentation/pages/home.dart';
-import 'package:test_flutter/features/profile/presentation/pages/profile_page.dart';
-import 'package:test_flutter/features/search/presentation/pages/search_page.dart';
+import 'package:test_flutter/features/home/home.dart';
+import 'package:test_flutter/features/profile/profile_page.dart';
+import 'package:test_flutter/features/search/search_page.dart';
 import 'package:test_flutter/utils/constant.dart' as constant;
 
 class BottomNavBar extends StatefulWidget {
